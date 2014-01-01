@@ -14,10 +14,10 @@ export verbose = 0
 endif
 
 ifeq ($(verbose),0)
-	Q = @
-	MAKEFLAGS += -s
+Q = @
+MAKEFLAGS += -s
 else
-	Q =
+Q =
 endif
 export Q
 
@@ -38,7 +38,7 @@ BUILDDIR = build
 # locations and edit the pathnames.  The rest of Arduino is not needed.
 #************************************************************************
 
-ARDUINO = ../../arduino-1.0.5
+ARDUINO ?= ../../arduino-1.0.5
 
 # path location for Teensy Loader, teensy_post_compile and teensy_reboot
 TOOLS_PATH = $(ARDUINO)/hardware/tools
@@ -94,11 +94,12 @@ TC_FILES := $(patsubst $(CORE_PARENT)/%, %, $(wildcard $(CORE_PATH)/*.c))
 TCPP_FILES := $(patsubst $(CORE_PARENT)/%, %, $(wildcard $(CORE_PATH)/*.cpp))
 C_FILES := $(wildcard *.c)
 CPP_FILES := $(wildcard *.cpp)
+INO_FILES := $(wildcard *.ino)
 
 # include paths for libraries
 L_INC := $(foreach lib,$(filter %/, $(wildcard $(LIBRARY_PATH)/*/)), -I$(lib))
 
-OBJS_FILES := $(TARGET).o $(C_FILES:.c=.o) $(CPP_FILES:.cpp=.o) $(TC_FILES:.c=.o) $(TCPP_FILES:.cpp=.o) $(LC_FILES:.c=.o) $(LCPP_FILES:.cpp=.o)
+OBJS_FILES := $(INO_FILES:.ino=.o) $(C_FILES:.c=.o) $(CPP_FILES:.cpp=.o) $(TC_FILES:.c=.o) $(TCPP_FILES:.cpp=.o) $(LC_FILES:.c=.o) $(LCPP_FILES:.cpp=.o)
 OBJS := $(foreach obj,$(OBJS_FILES), $(BUILDDIR)/$(obj))
 
 all: hex
@@ -108,10 +109,10 @@ build: $(TARGET).elf
 hex: $(TARGET).hex
 
 post_compile: $(TARGET).hex
-	$(Q)$(abspath $(TOOLS_PATH))/teensy_post_compile -file="$(basename $<)" -path=$(CURDIR) -tools="$(abspath $(TOOLS_PATH))"
+	$(Q)$(TOOLS_PATH)/teensy_post_compile -file="$(basename $<)" -path=$(CURDIR) -tools="$(TOOLS_PATH)"
 
 reboot:
-	$(Q)-$(abspath $(TOOLS_PATH))/teensy_reboot
+	$(Q)-$(TOOLS_PATH)/teensy_reboot
 
 upload: post_compile reboot
 

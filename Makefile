@@ -32,6 +32,12 @@ OPTIONS += -D__MK20DX256__ -DARDUINO=105
 
 BUILDDIR = build
 
+ifdef COMSPEC
+cygpath-win	= $(shell cygpath -w "$1")
+else
+cygpath-win	= $1
+endif
+
 #************************************************************************
 # Location of Teensyduino utilities, Toolchain, and Arduino Libraries.
 # To use this makefile without Arduino, copy the resources from these
@@ -109,7 +115,7 @@ build: $(TARGET).elf
 hex: $(TARGET).hex
 
 post_compile: $(TARGET).hex
-	$(Q)$(TOOLS_PATH)/teensy_post_compile -file="$(basename $<)" -path=. -tools="$(TOOLS_PATH)"
+	$(Q)$(TOOLS_PATH)/teensy_post_compile -file="$(basename $<)" -path="$(call cygpath-win,$(CURDIR))" -tools="$(TOOLS_PATH)"
 
 reboot:
 	$(Q)-$(TOOLS_PATH)/teensy_reboot

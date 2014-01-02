@@ -109,7 +109,7 @@ build: $(TARGET).elf
 hex: $(TARGET).hex
 
 post_compile: $(TARGET).hex
-	$(Q)$(TOOLS_PATH)/teensy_post_compile -file="$(basename $<)" -path=$(CURDIR) -tools="$(TOOLS_PATH)"
+	$(Q)$(TOOLS_PATH)/teensy_post_compile -file="$(basename $<)" -path=. -tools="$(TOOLS_PATH)"
 
 reboot:
 	$(Q)-$(TOOLS_PATH)/teensy_reboot

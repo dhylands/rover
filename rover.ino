@@ -3,6 +3,7 @@
 #include "TimeVal.h"
 #include "TimerEvent.h"
 #include "Cmd.h"
+#include "CmdServo.h"
 
 const int led = LED_BUILTIN;
 
@@ -93,11 +94,12 @@ void awr(int argc, char **argv)
 
 const Cmd::Entry gCmdEntry[] =
 {
-  { Cmd::Args,  "args", "",           "Displays arguments passed on command line" },
-  { aw,         "aw",   "pin val",    "Calls analogWrite(pin, val)" },
-  { awf,        "awf",  "pin freq",   "Calls analogWriteFrequeny(pin, frequency)" },
-  { awr,        "awr",  "resoltion",  "Calls analogWriteResolution(resolution)" },
-  { Cmd::Help,  "help", "[command]",  "Displays help for a given command (or all commands)" },
+  { Cmd::Args,  "args",  "",           "Displays arguments passed on command line" },
+  { aw,         "aw",    "pin val",    "Calls analogWrite(pin, val)" },
+  { awf,        "awf",   "pin freq",   "Calls analogWriteFrequeny(pin, frequency)" },
+  { awr,        "awr",   "resoltion",  "Calls analogWriteResolution(resolution)" },
+  { Cmd::Help,  "help",  "[command]",  "Displays help for a given command (or all commands)" },
+  { CmdServo,   "servo", "pin sub-command", "Servo class commands", gCmdServoEntry },
   { nullptr, nullptr, nullptr, nullptr }
 };
 
